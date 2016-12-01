@@ -8,8 +8,24 @@ The docs use Markdown syntax. Syntax reference: [Slate markdown](https://github.
 
 #Changelog
 
+## December 1, 2016
+- **NEW** Added new order payment status: Partially Refunded. [Learn more](https://developers.ecwid.com/api-documentation#orders)
+
+##November 15, 2016
+- **NEW** Added ability to get product details using multiple product IDs separated by a comma. [Learn more](https://developers.ecwid.com/api-documentation#search-products)
+- **NEW** Added latest category update date to store update stats. [Learn more](https://developers.ecwid.com/api-documentation#get-store-update-statistics)
+
+##November 4, 2016
+- **NEW** Added more ways to contact store for the new Starter site: Whatsapp, Viber, Telegram and more. [Learn more](https://developers.ecwid.com/api-documentation#starter-site)
+
+##October 27, 2016
+- **NEW** Added new REST API endpoint for getting up-to-date HTML invoice of a specific order. [Learn more](https://developers.ecwid.com/api-documentation#get-order-invoice)
+
+##October 26, 2016
+- **NEW** Added `hideOutOfStockProductsInStorefront` field to control the visibility of out of stock products in storefront. [Learn more](https://developers.ecwid.com/api-documentation#store-information)
+
 ##October 17, 2016
-- **NEW** Added support for custom HTTP headers when using webhooks. [Learn more](https://developers.ecwid.com/api-documentation#custon-http-headers)
+- **NEW** Added support for custom HTTP headers when using webhooks. [Learn more](https://developers.ecwid.com/api-documentation#custom-http-headers)
 - Added Python examples for file upload methods
 
 ##August 23, 2016

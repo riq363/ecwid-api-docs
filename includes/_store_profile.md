@@ -45,7 +45,8 @@ Name | Type    | Description
         "googleAnalyticsId": "UA-123456-1",
         "orderCommentsEnabled": false,
         "orderCommentsCaption": "Order comments",
-        "orderCommentsRequired": false
+        "orderCommentsRequired": false,
+        "hideOutOfStockProductsInStorefront": true
     },
     "mailNotifications": {
         "adminNotificationEmails": [
@@ -182,6 +183,118 @@ Name | Type    | Description
 }
 ```
 
+> Public token request example
+
+```http
+GET /api/v3/4870020/profile?token=public_123abcd HTTP/1.1
+Host: app.ecwid.com
+Cache-Control: no-cache
+```
+
+```json
+{
+  "generalInfo": {
+    "storeId": 5035009,
+    "storeUrl": "https://example.com",
+    "starterSite": {
+      "ecwidSubdomain": "demo",
+      "generatedUrl": "https://demo.ecwid.com"
+    }
+  },
+  "settings": {
+    "closed": false,
+    "storeName": "Awesome store",
+    "googleAnalyticsId": ""
+  },
+  "mailNotifications": {
+    "customerNotificationFromEmail": "info@example.com"
+  },
+  "company": {
+    "companyName": "Cool slippers for dogs",
+    "email": "info@example.com",
+    "street": "W 3d st",
+    "city": "New York",
+    "countryCode": "US",
+    "postalCode": "10002",
+    "stateOrProvinceCode": "NY",
+    "phone": ""
+  },
+  "formatsAndUnits": {
+    "currency": "USD",
+    "currencyPrefix": "$",
+    "currencySuffix": "",
+    "currencyGroupSeparator": " ",
+    "currencyDecimalSeparator": ".",
+    "currencyPrecision": 2,
+    "currencyTruncateZeroFractional": false,
+    "currencyRate": 1,
+    "weightUnit": "KILOGRAM",
+    "weightGroupSeparator": " ",
+    "weightDecimalSeparator": ".",
+    "weightTruncateZeroFractional": false,
+    "timeFormat": "hh:mm a",
+    "dateFormat": "EEE, MMM d, ''yy",
+    "timezone": "Europe/Samara",
+    "dimensionsUnit": "CM"
+  },
+  "languages": {
+    "enabledLanguages": [
+      "en",
+      "ar",
+      "be",
+      "bg",
+      "ca",
+      "cs",
+      "cy",
+      "da",
+      "de",
+      "el",
+      "es",
+      "es_419",
+      "et",
+      "eu",
+      "fi",
+      "fa",
+      "fr",
+      "id",
+      "is",
+      "it",
+      "ja",
+      "he",
+      "hr",
+      "hu",
+      "hy",
+      "ka",
+      "ko",
+      "lt",
+      "lv",
+      "mk",
+      "mr",
+      "ms",
+      "nl",
+      "no",
+      "pl",
+      "pt",
+      "pt_BR",
+      "ro",
+      "ru",
+      "sk",
+      "sl",
+      "sr",
+      "sv",
+      "sq",
+      "th",
+      "tr",
+      "uk",
+      "vi",
+      "zh",
+      "zh_TW"
+    ],
+    "facebookPreferredLocale": "en_US"
+  }
+}
+```
+
 A JSON object of type 'Profile' with the following fields:
 
 #### Profile
@@ -227,6 +340,7 @@ googleAnalyticsId | string | [Google Analytics ID](https://help.ecwid.com/custom
 orderCommentsEnabled | boolean | `true` if order comments feature is enabled, `false` otherwise
 orderCommentsCaption | string | Caption for order comments field in storefront
 orderCommentsRequired | boolean | `true` if order comments are required to be filled, `false` otherwise
+hideOutOfStockProductsInStorefront | boolean | `true` if out of stock products are hidden in storefront, `false` otherwise. This setting is located in Ecwid Control Panel > Settings > General > Cart
 
 #### MailNotifications
 Field | Type | Description
@@ -386,7 +500,8 @@ Cache-Control: no-cache
         closed: false,
         storeName: "My Cool Store",
         "googleRemarketingEnabled": false,
-        "googleAnalyticsId": "UA-654321-1"
+        "googleAnalyticsId": "UA-654321-1",
+        "hideOutOfStockProductsInStorefront": false
     },
     company: {
       companyName: "My Company, Inc",
@@ -476,6 +591,7 @@ googleAnalyticsId | string | [Google Analytics ID](https://help.ecwid.com/custom
 orderCommentsEnabled | boolean | Use `true` to enable order comments feature, `false` otherwise
 orderCommentsCaption | string | Caption for order comments field in storefront. If the value is empty, the default 'Order comments' caption will be used
 orderCommentsRequired | boolean | Use `true` to require order comments to be filled, `false` otherwise
+hideOutOfStockProductsInStorefront | boolean | `true` if out of stock products are hidden in storefront, `false` otherwise. This setting is located in Ecwid Control Panel > Settings > General > Cart
 
 #### MailNotifications
 Field | Type | Description
@@ -989,7 +1105,8 @@ Name | Type    | Description
 {
     "productsUpdated": "2014-10-19 18:56:21 +0400",
     "ordersUpdated": "2014-10-15 16:54:11 +0400",
-    "profileUpdated": "2014-10-19 18:55:35 +0400"
+    "profileUpdated": "2014-10-19 18:55:35 +0400",
+    "categoriesUpdated": "2014-10-19 12:23:12 +0400"
 }
 ```
 
@@ -1001,6 +1118,7 @@ Field | Type | Description
 productsUpdated | string | Date of the latest changes in store catalog (products, categories), e.g. `2014-10-15 16:54:11 +0400`
 ordersUpdated | string | Date of the latest changes in store orders, e.g. `2014-10-15 16:54:11 +0400`
 profileUpdated | string | Date of the latest changes in store information, e.g. `2014-10-15 16:54:11 +0400`
+categoriesUpdated | string | Date of the latest changes in store categories, e.g. `2014-10-19 12:23:12 +0400`
 
 ### Errors
 

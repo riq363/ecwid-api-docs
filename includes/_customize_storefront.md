@@ -17,7 +17,7 @@ Ecwid API allows you to attach external JavaScript and CSS scripts and load them
 
 **How it works and how to set up**
 
-1. When [registering of your app in Ecwid](/register), you specify https URL of the `.css` or `.js` file (or both) you'd like to be loaded in user storefront. 
+1. After your app is registered, [contact us](/contact) and provide https URL of the `.css` and/or `.js` file you'd like to be loaded in user storefront. 
 2. When asking user to install your app, Ecwid will ask for `customize_storefront` scope from them. (*If your app is for a specific store, make sure to add `customize_storefront` scope in the oAuth process*)
 3. The next time user's storefront is loaded in any browser, the specified external JS/CSS files will be automatically loaded and executed on the page. 
 
@@ -149,6 +149,14 @@ In most cases, your application behavior will vary depending on the store it is 
 For example, let's say you need to dynamically add a store-specific configuration to your script when it's executed in some particular storefront. You can detect the store ID in your script and call a script on your server containing the store-specific code. 
 
 To get information for that specific store you can use `Ecwid.getAppPublicConfig` function in [Ecwid Javascript API](#storefront-js-api). See more details on how to access that data in **Application data** section of documentation.
+
+## Caching JavaScript file content
+
+When your external JS file is loaded on a page, it is loaded like any other resource via a GET request by a web browser. If you'd like to use caching to increase the loading speeds of your script, we can suggest several options:
+
+- invalidate cache for your JS file link when deploying a new version
+- in your JS file, place a code that will get the latest JS assets file from your server dynamically and append it to a page (instead of the using an actual code of your app on that URL)
+- don't use caching, so that your files for storefront are always up-to-date for any user
 
 ## Using jQuery on store pages
 

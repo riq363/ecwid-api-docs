@@ -1,4 +1,5 @@
 # Add Shipping Method
+
 # Overview
 
 > Added custom shipping methods in checkout process
@@ -31,7 +32,7 @@ Ecwid will expect a response from your service within 10 second interval to disp
 
 ### 4. Ecwid displays the rates at checkout
 
-Based on the response from your app, Ecwid will display the shipping methods for customers at the checkout. Customer can select them just like any other shipping method in that Ecwid store and it will be shown in the order details.
+Based on the response from your app, Ecwid will display the shipping methods for customers at the checkout. Customer can select them just like any other shipping method in that Ecwid store and it will be shown in the order details. Shipping methods from the application will be added to any currently enabled shipping methods a store has enabled.
 
 # Merchant settings for shipping method
 
@@ -186,7 +187,7 @@ POST https://mycoolapp.com/integration HTTP/1.1
 Name | Type    | Description
 ---- | ------- | --------------
 storeId |  number | Ecwid store ID
-merchantAppSettings | json | Merchant settings for your integration set up by your code. [More details](#merchant-settings-for-shpping-method)
+merchantAppSettings | json | Merchant settings for your integration set up by your code. [More details](#merchant-settings-for-shipping-method)
 cart | \<*CartDetails*\> | Offset from the beginning of the returned items list (for paging)
 
 ### CartDetails
