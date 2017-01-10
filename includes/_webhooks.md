@@ -4,27 +4,26 @@
 
 ## Webhooks
 
-So what is a webhook? Basically, a WebHook is an HTTP POST request that occurs when something happens, i.e. it's a simple event-notification via HTTP POST. Ecwid uses webhooks to notifiy your application in real time about event in the merchant store. 
+Basically, a webhook is an HTTP POST request that occurs when something happens. In other words, it’s a simple event notification via HTTP POST. Ecwid uses webhooks to notify your application in real time about events in the merchant store.
 
 This is how your application can use webhooks:
 
-* Receive a request from Ecwid every time a new product is created or an exsiting product is changed to let you synchronize the store catalog with your local database. Get the updated product data and make your app in sync in one HTTP request instead of downloading the whole catalog.
-* Get notified about every new order in the store to send a custom email or text message, or generate a custom receipt or subscribe the customer to your newsletter.
+* Receive a request from Ecwid every time a new product is created or an existing product is changed so you can synchronize the store catalog with your local database. Get the updated product data and make your app in sync in one HTTP request instead of downloading the whole catalog.
+* Get notified about every new order in the store so you can send a custom email or text message, generate a custom receipt, or subscribe the customer to your newsletter.
 
 <aside class="notice">
-Don't use webhooks themselves as actionable items – please see the <a href="#processing-webhooks">Processing Webhooks</a> notes below for details on working with webhooks.
+Don’t use webhooks themselves as actionable items – please see the <a href="#processing-webhooks">Processing Webhooks</a> notes below for details on working with webhooks.
 </aside>
 
 ## How it works in Ecwid
 
 In a nutshell, webhooks in Ecwid work this way:
 
-* In your application settings, you specify an URL, which Ecwid will use to send webhooks to
+* Ecwid will use the `Webhook URL` from your application details to send webhooks there
 * When a user (merchant) installs your application, the webhooks for this store are automatically enabled
 * Each supported event in the store (e.g. new order is placed) triggers an HTTP POST request to the URL your specified
 * Your application receives the requests and replies with `200 OK` to identify that it's received
 * Then your app processes the webhook request and performs further steps to handle the event
-
 
 ## Supported events
 
@@ -309,6 +308,8 @@ Webhooks also depend not only on the event types specified for them, but also fo
 
 When an event occurs, Ecwid will immediately try to send a webhook to your endpoint. However, if it fails to respond with 200OK response status or it has errors in the response (from PHP code, for example). Ecwid will not be able to deliver this webhook to your endpoint, because it failed to accept it.
 
+This case also includes situations when your endpoint is performing redirects to other pages. In that case, it responds with 301 HTTP code, thus the webhook isn't delivered properly.
+
 **Ecwid can't access your endpoint**
 
 When [setting up webhooks](#setting-up-webhooks), make sure that your endpoint is publicly accessible by any resource (no local servers, etc.). This way, Ecwid services can successfully send and deliver POST requests to yoru endpoint.
@@ -362,7 +363,7 @@ See the example in the [webhook processing example code](#webhook-processing-exa
 <?php 
 // Get contents of webhook request
 $requestBody = file_get_contents('php://input');
-$client_secret = 'abcde123456789';
+$client_secret = 'abcde123456789'; // your client_secret value sent to you after the app registration
 
 // Parse webhook data
 $decodedBody = json_decode($requestBody, true);
@@ -378,7 +379,7 @@ $data = $decodedBody['data'];
 http_response_code(200);
 
 // Filter out the events we're not interested in
-if ($eventType != 'order.updated') {
+if ($eventType !== 'order.updated') {
     exit;
 }
 
@@ -391,7 +392,7 @@ foreach (getallheaders() as $name => $value) {
         $hmac_result = hash_hmac("sha256", "$eventCreated.$eventId", $client_secret, true);
         $generatedSignature = base64_encode($hmac_result);
         
-        if ($generatedSignature != $headerSignature) {
+        if ($generatedSignature !== $headerSignature) {
             echo 'Signature verification failed';
             exit;
         }

@@ -1,6 +1,6 @@
 # Storefront JS API
 
-The described Javascript API is available for all Ecwid users. The API is intended for better integrating Ecwid with the surrounding web site. The API is based on two concepts: objects and events. Objects are simple containers for methods, while events are containers for the user-supplied callbacks (or extensions). 
+The JavaScript API we described is available for all Ecwid users. The API is intended for better integrating Ecwid with the surrounding website. The API is based on two concepts: objects and events. Objects are simple containers for methods, while events are containers for the user-supplied callbacks (or extensions).
 
 > Check out [Customize Storefront](#customize-storefront) section for general details on changing Ecwid's storefront.
 
@@ -11,11 +11,17 @@ Ecwid.OnPageLoad.add(function(page) {
         alert("My page load handler: " + page.type);
 });
 ```
+
 Extensions are added to the events using the `add()` method, see example code on the right.
 
-This sample adds a function that is called every time a new page is loading in the product browser. Callbacks may be objects with multiple functions instead of just one function as shown in the example above, which may return useful values. The form of the extensions, their parameters and the need of a return value depends on the event that occurs.
+This sample adds a function that is called every time a new page is loading in the product browser. Callbacks may be objects with multiple functions instead of just one function as shown in the example above, which may return useful values. The form of the extensions, their parameters, and the need of a return value depends on the event that occurs.
 
-Note that the `add()` method call follows the script.js script of the standard Ecwid integration code. It is important to include script.js before any use of the API methods. Moreover, because of the staged loading of Ecwid, only few of API functions are available during the page load. Most of the Ecwid Javascript API is available after Ecwid is loaded completely. The moment, when you can use Javascript API, can be caught by the `Ecwid.OnAPILoaded` event.
+Note that the `add()` method is located in the script.js file of the standard Ecwid integration code. It is important to include script.js before you use the API methods. Moreover, because of the staged loading of Ecwid, only few API methods are available during the page load. Most of the Ecwid JavaScript API is available after Ecwid is loaded completely. All JavaScript API methods will be available after you hook into the `Ecwid.OnAPILoaded` event.
+
+<aside class="notice">
+Ecwid Storefront JavaScript API is available on any Ecwid plan.
+</aside>
+
 
 # Get Storefront Details
 
@@ -185,7 +191,7 @@ Ecwid.OnPageLoaded.add(function(page){
 
 Name | Type | Description
 ---- | ----- | -----------
-type | string, one of the following: ‘ACCOUNT_SETTINGS’, ‘ADDRESS_BOOK’, ‘ORDERS’, ‘CATEGORY’, ‘CART’, ‘CHECKOUT_ADDRESS_BOOK’, ‘CHECKOUT_PAYMENT_DETAILS’, ‘CHECKOUT_PLACE_ORDER’, ‘CHECKOUT_SHIPPING_ADDRESS’, ‘ORDER_CONFIRMATION’, ‘ORDER_FAILURE’, ‘CHECKOUT_RESULT’, ‘DOWNLOAD_ERROR’, ‘PRODUCT’, ‘SEARCH’, 'FAVORITES' | The type of the page. Some pages may have parameters like for example product id of the viewing product. Those parameters are described below.
+type | string, one of the following: ‘ACCOUNT_SETTINGS’, ‘ADDRESS_BOOK’, ‘ORDERS’, ‘CATEGORY’, ‘CART’, ‘CHECKOUT_ADDRESS_BOOK’, ‘CHECKOUT_PAYMENT_DETAILS’, ‘CHECKOUT_PLACE_ORDER’, ‘CHECKOUT_SHIPPING_ADDRESS’, ‘ORDER_CONFIRMATION’, ‘ORDER_FAILURE’, ‘CHECKOUT_RESULT’, ‘DOWNLOAD_ERROR’, ‘PRODUCT’, ‘SEARCH’, 'FAVORITES', 'RESET_PASSWORD' | The type of the page. Some pages may have parameters like for example product id of the viewing product. Those parameters are described below.
 keywords | string, optional | for type==’ORDERS’: the keywords that are used to find orders in the customer account page. for type==’SEARCH’: the keywords that are used to find products on the product search page.
 from | integer timestamp, optional | for type==’ORDERS’: The timestamp of the start of the orders date range.
 to | integer timestamp, optional | for type==’ORDERS’: The timestamp of the end of the orders date range.

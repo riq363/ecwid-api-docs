@@ -1,10 +1,10 @@
 # Overview
 
-The documentation below describes various ways to interact with Ecwid store using API. In each section you can find detailed description as well as code examples for managing store data to help you create your own application.
+The documentation below describes various ways to interact with the Ecwid store by using the API. In each section you can find a detailed description, as well as code examples for managing store data that will help you create your own application.
 
-To find out more about Ecwid platform and get some basic details about it, please visit [Get started](http://developers.ecwid.com/get-started) page.
+To find out more about the Ecwid platform and get some basic details about it, please visit the [Get Started](/get-started) page.
 
-Learn more on how to get started with developing an app: [https://developers.ecwid.com/developing-your-app](https://developers.ecwid.com/developing-your-app)
+Learn more on how to start developing an app here: [https://developers.ecwid.com/developing-your-app](/developing-your-app)
 
 # API features
 
@@ -41,6 +41,12 @@ More information: [Custom Shipping API](#add-shipping-method)
 Custom Payment API allows you to add new payment methods to an Ecwid store. Merchant will install your app, set it up and they will be able to accept payments through your payment system for orders in their store.
 
 More information: [Custom Payment API](#add-payment-method)
+
+**Apply Custom Discount**
+
+Custom Discount API allows you to apply a custom discount amount to an order being placed at the moment. Merchant can configure the discount rules in their Ecwid Control Panel using the Native apps feature and customers will have discounts on their orders according to those rules at checkout.
+
+More information: [Custom Discount API](#add-custom-discount)
 
 **Application Storage**
 
@@ -150,6 +156,8 @@ Customizing Ecwid's design never been easier - apply your CSS file to all storef
 Suggested API features:
 
 - [Apply your custom CSS](#custom-css) file for Ecwid storefront
+
+Learn more on how to create a theme for Ecwid: [https://developers.ecwid.com/how-to-create-a-theme-for-an-ecwid-store](https://developers.ecwid.com/how-to-create-a-theme-for-an-ecwid-store)
 
 # API availability on Ecwid plans
 

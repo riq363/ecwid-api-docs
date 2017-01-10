@@ -8,8 +8,22 @@ The docs use Markdown syntax. Syntax reference: [Slate markdown](https://github.
 
 #Changelog
 
+## January 5, 2017
+- **NEW** Added support for product dimensions feature. Now each product and shipping itself can be calculated according to the product dimensions specified for products.
+
+## December 27, 2016
+
+- **NEW** Added support for passing custom application state for Native applications. You can use this to initiate a custom action performed when loading the application tab in Ecwid Control Panel. [Learn more](https://developers.ecwid.com/api-documentation#user-authentication)
+
+## December 26, 2016
+- **NEW** Added `READY_FOR_PICKUP` fulfillment status for orders and pickup fields support for selected shipping options in order. [Learn more](https://developers.ecwid.com/api-documentation#orders)
+
+## December 8, 2016
+- **NEW** Added Custom Promo API to apply discounts to orders when customer is at checkout. [Learn more](https://developers.ecwid.com/api-documentation#add-custom-discount)
+
 ## December 1, 2016
 - **NEW** Added new order payment status: Partially Refunded. [Learn more](https://developers.ecwid.com/api-documentation#orders)
+- **NEW** Added support for tax exempt customers in the Ecwid REST API. [Learn more](https://support.ecwid.com/hc/en-us/articles/213823045-How-to-handle-tax-exempt-customers-in-Ecwid)
 
 ##November 15, 2016
 - **NEW** Added ability to get product details using multiple product IDs separated by a comma. [Learn more](https://developers.ecwid.com/api-documentation#search-products)

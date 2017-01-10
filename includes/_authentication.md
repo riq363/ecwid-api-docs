@@ -2,11 +2,11 @@
 
 # Overview
 
-Ecwid platform provides two ways of how applications can be installed and operated with an online store: native and external apps. 
+The Ecwid platform provides two ways of installing and operating applications in an online store: native and external apps.
 
-**Native apps** work solely in Ecwid Control Panel by adding a new tab into one of its several sections. When user visits that tab, Ecwid will load the app's page in an iframe window. App can interact with a store (get access token, get store information) and with Ecwid Control Panel using [Ecwid JS SDK](#ecwid-javascript-sdk). 
+**Native apps** work solely in the Ecwid Control Panel by adding a new tab into one of its sections. When a user visits that tab, Ecwid will load the app page in an IFRAME window. The app can interact with a store (get access token, get store information) and with the Ecwid Control Panel using [Ecwid JS SDK](#ecwid-javascript-sdk).
 
-**External apps** work outside of Ecwid Control Panel on an external website or in the background with no set up required. These applications need to [handle the oAuth process](#get-access-token) themselves in order to get access token. Usually these apps work on server-side with their own database to store access tokens of their users' stores.
+**External apps** work outside of the Ecwid Control Panel on an external website or in the background with no setup required. These applications need to [handle the oAuth process](#get-access-token) themselves in order to get an access token. Usually, they work on the server side with their own database to store the access tokens of their users’ stores.
 
 # Access tokens
 
@@ -188,6 +188,8 @@ For security reasons, a temporary code can be exchanged to an access token only 
 
 Scopes are permissions that identifies the scope of access your application requests from the user. Below you can see the names of access scopes that exist in Ecwid API and their description.
 
+Each application has their specified set of access scopes which are required for this applicaiton. If you specify additional scopes, that excess the specified ones for the app in Ecwid, you will see an error message. So if you need to add more access scopes - please [contact us](/contact) to update your app.
+
 Access scope | Notes
 ------------ | -----
 read_store_profile | Get store name and general settings, get store admin email, get updates statistics etc. *Requested in all cases even if not specified*
@@ -211,6 +213,7 @@ add_payment_method | Add a new payment method to the store (see [Add Payment Met
 read_stores | Check if there is a store already registered with an email (see [Manage Stores](#stores))
 create_stores | Create a new Ecwid store using API (see [Manage Stores](#stores))
 public_storefront | Get public store details with public access token
+customize_cart_calculation | Apply custom discounts to orders in real time
 
 ## Complete oAuth flow
 

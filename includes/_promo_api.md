@@ -1,75 +1,58 @@
-# Add Shipping Method
+# Add Custom Discount
 
 # Overview
 
-> Added custom shipping methods in checkout process
-
-> ![Custom shipping methods in checkout process](https://don16obqbay2c.cloudfront.net/wp-content/uploads/shippingMethod-1468407305.png)
-
-Using the Custom Shipping API, you can integrate a new shipping carrier to provide real-time shipping methods with different rates for the Ecwid store customers. This functionality will work in the form of an application that users install from the Ecwid App Market.
+With the Custom Discount API you can apply custom discounts to the order total when the customer is at the checkout.
 
 <aside class="notice">
-Access scope required: <strong>add_shipping_method</strong> (see <a href="#access-scopes">Access scopes</a>)
+Access scope required: <strong>customize_cart_calculation</strong> (see <a href="#access-scopes">Access scopes</a>)
 </aside>
+
+### Discount types examples
+
+The Custom Discount API allows you to apply an absolute or percent discount to an order. While this sounds simple enough, it provides many possibilities and different ways to use it in a store.
+
+Examples:
+
+- **Customer loyalty**: when a customer from a VIP customer group is at the checkout, apply 5% discount.
+- **Limited-time offers**: enable or disable discounts based on a current date.
+- **Apply discount to select products**: when a customer adds a product from the sale category, apply 3% discount.
+- **Local customer discount**: if the customer’s location is in the same city as the store, apply a local discount of $5.
+- **Buy one, get one free (BOGOF)**: when the customer puts a specific product in their cart, the app adds a new free product with the JS API. The app applies an absolute discount for the cost amount of that free product.
+- And many more!
 
 # How to set up
 
-When [registering a new application](/register) for Ecwid, specify the request URL for your application. Ecwid will be sending order details requests to that endpoint and expect shipping rates in a specific format in response.
+When [registering a new application](/register) for Ecwid, specify the request URL for your application. Ecwid will be sending cart details requests to that endpoint and expect discounts in a specific format in response.
 
 # How it works
 
-### 1. User configures app settings in settings tab
+### 1. Ecwid sends cart data to app request URL
 
-After the installation, user would need a page where they can configure it: provide their account details, set up dimensions, etc. We recommend using [Native apps feature](#embedded-apps) to provide this functionality. To manage and store those settings, see the [Merchant app settings](#merchant-settings-for-shipping-method) section.
+To apply new discounts for a cart in storefront, Ecwid will send a **POST request** to your endpoint with cart details: items, customer address, merchant app settings, etc. That endpoint must respond to the request with the applied discounts for this order and store configuration.
 
-### 2. Ecwid sends order data to app request URL
+### 2. Application returns discounts in a specific format
 
-To show new shipping methods in storefront, Ecwid will send a **POST request** to your endpoint with order details: items, customer address, merchant app settings, etc. That endpoint must respond to the request with the shipping rates for this configuration.
+Ecwid will expect a response from your service within **5 second interval** to display additional discounts for an order. In the response, provide discount value, type of discount (percent or absolute) and discount description. See the response format in the [Request and response](#request-and-response) section.
 
-### 3. Application returns the rates in a specific format
+### 3. Ecwid displays discounts at checkout
 
-Ecwid will expect a response from your service within 10 second interval to display additional shipping methods for customers. In the response, provide shipping method name, rate and estimated delivery time. See the response format in the [Request and response](#request-and-response) section.
+Based on the response from your app, Ecwid will display the discounts for customers on the cart page. Customer can view the amount and the reason for a discount that your solution sent to Ecwid. All the discount details will be saved for that order and they will be displayed in related order information.
 
-### 4. Ecwid displays the rates at checkout
+#### Q: Can I create a user interface for user to select and set different duscount rules?
 
-Based on the response from your app, Ecwid will display the shipping methods for customers at the checkout. Customer can select them just like any other shipping method in that Ecwid store and it will be shown in the order details. Shipping methods from the application will be added to any currently enabled shipping methods a store has enabled.
-
-# Merchant settings for shipping method
-
-Your application can require merchants to specify their shipping account details, package size and any other user preferences you may require. We recommend adding a new tab into the Ecwid Control Panel's Shipping settings for optimal experience - Native applications feature.
-
-> Merchant settings example
-
-> ![Merchant settings example](https://don16obqbay2c.cloudfront.net/wp-content/uploads/shippingSettings-1468407629.png)
-
-**Settings**
-
-First, set up a new tab in Ecwid Control Panel, which will serve as a settings page for your users. This tab will load a page from your server in an iframe in a separate tab of Ecwid Control Panel. See [Native Applications](#native-applications).
-
-When merchant is in the settings tab of your app, your code can create and modify the merchant settings using the **Application storage** feature. It's a simple `key:value` storage, which can serve you as an app database. For your convenience, you can access it [via Javascript](#javascript-storage-api) (client-side) or [Ecwid REST API](#rest-storage-api) (server-side).
-
-**Request**
-
-Once the settings are saved there, Ecwid will send them in a **POST request** to your application alongside order details when customer is at checkout stage. The request will contain **all data** from your application storage, including public and other keys that were specified. Use it to idetify the store and a user for the shipping rates.
-
-You can also use the `public` key of the application storage to save data for accessing in the storefront. More details on how to handle such data: [Public application config](#public-application-config).
-
-Please make sure **not to pass any sensitive user data in the public application config**, as this information will be available via Ecwid Javascript API to any 3-rd party. To save and get that kind of information, use any other key names in your application storage. They will be provided in a request to your application as well as public information, but not accessible in the storefront.
-
-**Response**
-
-After you get a request from Ecwid, your application endpoint should get its components and return correct rates back to the customer in a response.
+After the installation, your app can add a page where they can configure it: provide their account details, set up discount rules, enable/disable rules, etc. We recommend using **Native apps** feature and the **Application storage** feature to provide this functionality. To manage and store those settings, see the [Advanced setup](#advanced-setup) section.
 
 # Request and response
 
-### Request
+Ecwid will send the cart details in a **body** of POST HTTP request in the following format:
 
-Ecwid will send order information in the **body** of a POST HTTP request in the following format:
+### Request
 
 > Request from Ecwid example
 
 ```http
-POST https://mycoolapp.com/integration HTTP/1.1
+POST https://mycoolapp.com/discounts HTTP/1.1
 ```
 ```json
 {
@@ -151,12 +134,7 @@ POST https://mycoolapp.com/integration HTTP/1.1
                             "Big"
                         ]
                     }
-                ],
-                "dimensions": {
-                    "height": 3.5,
-                    "width": 6,
-                    "length": 12.5
-                }
+                ]
             },
             {
                 "weight": 0.3,
@@ -166,21 +144,7 @@ POST https://mycoolapp.com/integration HTTP/1.1
                 "name": "Orange",
                 "categoryId": 19175294,
                 "sku": "02266183",
-                "selectedOptions": null,
-                "dimensions": {
-                    "height": 0,
-                    "width": 0,
-                    "length": 0
-                }
-            }
-        ],
-        "predictedPackages":[  
-            {  
-                "length":12.5,
-                "width":6,
-                "height":3.5,
-                "weight":1.5,
-                "declaredValue":7.08
+                "selectedOptions": null
             }
         ],
         "shippingAddress": {
@@ -200,8 +164,7 @@ POST https://mycoolapp.com/integration HTTP/1.1
         },
         "weight": 1.5,
         "weightUnit": "lbs",
-        "currency": "USD",
-        "dimensionUnit" : "MM"
+        "currency": "USD"
     }
 }
 ```
@@ -209,7 +172,7 @@ POST https://mycoolapp.com/integration HTTP/1.1
 Name | Type    | Description
 ---- | ------- | --------------
 storeId |  number | Ecwid store ID
-merchantAppSettings | json | Merchant settings for your integration set up by your code. [More details](#merchant-settings-for-shipping-method)
+merchantAppSettings | json | Merchant settings for your integration set up by your code. [More details](#advanced-setup)
 cart | \<*CartDetails*\> | Offset from the beginning of the returned items list (for paging)
 
 ### CartDetails
@@ -237,10 +200,8 @@ items | Array\<*OrderItems*\> | Array of customer's order items with basic detai
 weight | number | Total weight of the order
 weightUnit | string | Active weight units in the store at the moment of the request
 currency | string | Active currency in the store at the moment of the request
-predictedPackages | Array\<*PredictedPackage*\> | Predicted information about the packages to ship items in to customer
 shippingAddress | \<*ShippingAddressInfo*\> | Shipping address details (destination)
 originAddress | \<*OriginAdressInfo*\> | Origin address details (departure)
-dimensionUnit | string | Active dimension units of a store at the moment of the request. Possible values: `IN`,`YD`,`CM`,`MM`
 
 #### OrderItems
 Field | Type |  Description
@@ -253,7 +214,6 @@ sku | string | Product SKU. If the chosen options match a combination, this will
 amount |  number | Amount purchased
 name |  string | Product name
 selectedOptions | Array\<*OrderItemOption*\> | Product options values selected by the customer
-dimensions | \<ProductDimensions\> | Product dimensions info
 
 #### OrderItemOption
 Field | Type |  Description
@@ -271,13 +231,6 @@ id | number | File ID
 name |  string | File name
 size |  number | File size in bytes
 url |   string | File URL
-
-#### ProductDimensions
-Field | Type  | Description
--------------- | -------------- | --------------
-length | number | Length of a product
-width | number | Width of a product
-height | number | Height of a product
 
 #### DiscountCouponInfo
 Field | Type  | Description
@@ -311,15 +264,6 @@ name | string | Handling fee name set by store admin. E.g. `Wrapping`
 value | number | Handling fee value
 description | string | Handling fee description for customer
 
-### PredictedPackage
-Name | Type    | Description
----- | ------- | --------------
-height | number | Height of a predicted package
-width | number | Width of a predicted package
-length | number | Length of a predicted package
-weight | number | Total weight of a predicted package
-declaredValue | number | Declared value of a predicted package (subtotal of items in package)
-
 ### ShippingAddressInfo
 
 Name | Type    | Description
@@ -348,54 +292,49 @@ stateOrProvinceCode | string | Customer's state or province code in Ecwid
 
 ```json
 {
-    "shippingOptions": [{
-        "title": "SuperMail First Class",
-        "rate": 10.31,
-        "transitDays": "2-7"
-    }, {
-        "title": "SuperMail Regular Delivery",
-        "rate": 5.01,
-        "transitDays": "5"
-    }]
+    "discounts": [
+        {
+          "value": 20,
+          "type": "ABSOLUTE",
+          "description": "T-shirt for free for orders over $100"
+        },
+        {
+          "value": 10,
+          "type": "PERCENT",
+          "description": "10% off. Thanks for liking us on Facebook!"
+        }
+    ]
 }
 ```
 
-An array of JSON data of type 'ShippingOptions' with the following fields:
+An array of JSON data of type 'CustomDiscounts' with the following fields:
 
-### ShippingOptions
+### CustomDiscounts
 
 Name | Type    | Description
 ---- | ------- | --------------
-**title** | string | Shipping method name
-**rate** | number | Shipping rate amount
-**transitDays** | string | Estimated delivery time. Formats accepted: empty `""`, number `"5"`, several days estimate `"4-9"`
+**value** | number | Discount amount
+type | number | Discount type: `ABSOLUTE` or `PERCENT`. Default is `ABSOLUTE`
+description | string | Discount description
 
 <aside class="notice">
 Response parameters in <strong>bold</strong> are mandatory
 </aside>
 
-## Weight units
+# User interface for discount rules
 
-Ecwid supports several weigh units that can be passed in the request to your application to provide shipping rates. Below you can see all available units as well as their conversion values for calculation. 
+You can create a user interface for merchants to specify their own promo rule combinations or any other user preferences you may require for your app. 
 
-Name | Code | Value
------|------|------
-Carat | carat | 0.2
-Gram | gram | 1
-Ounce | ounce | 28.35
-Pound | lbs | 453.6
-Kilogram | kg | 1000
+We recommend adding a new tab into the Ecwid Control Panel's promotion section for optimal experience using the: [Native applications](#native-applications) feature and [Application storage](#application-storage) features.
 
-Gram is the main weight unit, from which other units are converted. Merchants can change weight units in [Ecwid Control Panel](https://my.ecwid.com/cp/CP.html#formats-units).
+**Settings and User interface**
 
-# Troubleshooting
+First, set up a new tab in Ecwid Control Panel, which will serve as a settings page for your users. This tab will load a page from your server in an iframe in a separate tab of Ecwid Control Panel. See [Native Applications](#native-applications) for more info.
 
-### A new shipping method at checkout is not appearing
+**Request**
 
-You created an app and installed it on your test store, but a new shipping method, returned by your resource, is not appearing when you open your store. There are several possible reasons for this:
+Once the settings are saved there, Ecwid will send them in a **POST request** to your application alongside cart details when customer is at checkout stage. The request will contain **all data** from your application storage, including public and other keys that were saved by the app. Use it to idetify the store and apply discounts accordingly. See [Application storage](#application-storage) for more info.
 
-* **The application is not configured properly** to add a shipping method at checkout. E.g. during registration, you haven't provided a link for Ecwid to send the requests to when customer is at checkout or the URL is incorrect. See [How to set uo](#how-to-set-up) for the details.
-* **`add_shipping_method` access scope** is missing in the list of requested scopes while installing the app. While creating an oAuth URL or installing your app from an app details page, make sure it incudes the `add_to_cp` scope in the list of requested permissions. 
-* **The response format from your resource is incorrect**. Ecwid accepts response from shipping applications in [a strict format](#request-and-response), so please make sure your endpoint is responding correctly back to Ecwid with the correct shipping methods. 
-* **The response from your resource has exceeded 10 second timeout**. When Ecwid sends a request for additional shipping methods to external resources, it expects to get a response within the 10 second timeout period. Make sure that your service is able to provide response in that time period.
-* **You're testing it in an Ecwid store which is on Free plan**. Ecwid API functionality is available on paid Ecwid plans only. Please upgrade your account or [contact us](/contact).
+**Response**
+
+After you get a request from Ecwid, your application endpoint should get its components and return discounts back to the customer in a response.

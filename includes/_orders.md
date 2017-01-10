@@ -13,6 +13,10 @@ Cache-Control: no-cache
 
 `GET https://app.ecwid.com/api/v3/{storeId}/orders?keywords={keywords}&totalFrom={totalFrom}&totalTo={totalTo}&createdFrom={createdFrom}&createdTo={createdTo}&updatedFrom={updatedFrom}&updatedTo={updatedTo}&couponCode={couponCode}&orderNumber={orderNumber}&vendorOrderNumber={vendorOrderNumber}&customer={customer}&paymentMethod={paymentMethod}&shippingMethod={shippingMethod}&paymentStatus={paymentStatus}&fulfillmentStatus={fulfillmentStatus}&offset={offset}&limit={limit}&token={token}`
 
+### Q: How to get info about abandoned sales? 
+
+Abandoned sales in Ecwid have order number just like completed orders. To get abandoned sale information, specify `INCOMPLETE` for `paymentStatus` filter when searching for orders.
+
 Name | Type    | Description
 ---- | ------- | --------------
 **storeId** |  number | Ecwid store ID
@@ -33,7 +37,7 @@ updatedTo | string | Order last update date/time (upper bound). Supported format
 paymentMethod | string | Payment method used by customer
 shippingMethod | string | Shipping method chosen by customer
 paymentStatus | string | Comma separated list of order payment statuses to search. Supported values: <ul><li>`AWAITING_PAYMENT`</li> <li>`PAID`</li> <li>`CANCELLED`</li> <li>`REFUNDED`</li> <li>`PARTIALLY_REFUNDED`</li> <li>`INCOMPLETE`</li></ul>
-fulfillmentStatus | string | Comma separated list of order fulfilment statuses to search. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li></ul>
+fulfillmentStatus | string | Comma separated list of order fulfilment statuses to search. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li><li>`READY_FOR_PICKUP`</li></ul>
 
 <aside class="notice">
 If no filters are set in the URL, API will return all orders <strong>except for unfinished orders</strong>. To get unfinished orders, use <i>INCOMPLETE</i> value for <strong>paymentStatus</strong> parameter.
@@ -83,6 +87,10 @@ Parameters in bold are mandatory
             "customerId": 15319410,
             "customerGroupId": 12345,
             "customerGroup": "Gold",
+            "customerTaxExempt": false,
+            "customerTaxId": "",
+            "customerTaxIdValid": false,
+            "reversedTaxApplied": false,
 
             // Discounts in order
             "membershipBasedDiscount": 0,
@@ -108,6 +116,12 @@ Parameters in bold are mandatory
                     "type": "PERCENT",
                     "base": "ON_TOTAL_AND_MEMBERSHIP",
                     "orderTotal": 15
+                },
+                {
+                    "value": 2,
+                    "type": "ABSOLUTE",
+                    "base": "CUSTOM",
+                    "description": "Buy more than 3 cherries and get $2 off!"
                 }
             ],
 
@@ -222,7 +236,9 @@ Parameters in bold are mandatory
             "shippingOption": {
                 "shippingMethodName": "2nd day delivery",
                 "shippingRate": 10,
-                "estimatedTransitTime": "5"
+                "estimatedTransitTime": "5",
+                "isPickup": false,
+                "pickupInstruction": ""
             },
             "handlingFee": {
                 "name": "Wrapping",
@@ -265,9 +281,13 @@ email | string  | Customer email address
 paymentMethod | string |  Payment method name
 paymentModule | string | Payment processor name
 tax | number | Tax total
+customerTaxExempt | boolean | `true` if customer is tax exempt, `false` otherwise. [Learn more](https://support.ecwid.com/hc/en-us/articles/213823045-How-to-handle-tax-exempt-customers-in-Ecwid)
+customerTaxId | string | Customer tax ID
+customerTaxIdValid | boolean | `true` if customer tax ID is valid, `false` otherwise
+reversedTaxApplied | boolean | `true` if order tax was set to 0 because customer specified their valid tax ID in checkout process. `false` otherwise
 ipAddress | string  | Customer IP
 paymentStatus | string |    Payment status. Supported values: <ul><li>`AWAITING_PAYMENT`</li> <li>`PAID`</li> <li>`CANCELLED`</li> <li>`REFUNDED`</li> <li>`PARTIALLY_REFUNDED`</li> <li>`INCOMPLETE`</li></ul>
-fulfillmentStatus | string |    Fulfilment status. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li></ul>
+fulfillmentStatus | string |    Fulfilment status. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li><li>`READY_FOR_PICKUP`</li></ul>
 refererUrl | string | URL of the page when order was placed (without hash (#) part)
 orderComments | string  | Order comments
 couponDiscount | number | Discount applied to order using a coupon
@@ -412,6 +432,8 @@ shippingCarrierName | string | Shipping carrier name, e.g. `USPS`
 shippingMethodName | string | Shipping option name
 shippingRate | number | Rate
 estimatedTransitTime | string | Delivery time estimation. Possible formats: number "5", several days estimate "4-9"
+isPickup | boolean | `true` if selected shipping option is local pickup. `false` otherwise
+pickupInstruction | string | Instruction for customer on how to receive their products
 
 #### HandlingFeeInfo
 Field | Type | Description
@@ -425,8 +447,9 @@ Field | Type | Description
 ----- | ---- | -----------
 value | number | Discount value
 type | string | Discount type: `ABS` or `PERCENT`
-base | string | Discount base, one of `ON_TOTAL`, `ON_MEMBERSHIP`, `ON_TOTAL_AND_MEMBERSHIP`
+base | string | Discount base, one of `ON_TOTAL`, `ON_MEMBERSHIP`, `ON_TOTAL_AND_MEMBERSHIP`, `CUSTOM`
 order_total | number | Minimum order subtotal the discount applies to
+description | string | Description of a discount (for discounts with base == `CUSTOM`)
 
 #### CreditCardStatus
 Field | Type | Description
@@ -517,6 +540,10 @@ Parameters in bold are mandatory
     "customerId": 15319410,
     "customerGroupId": 12345,
     "customerGroup": "Gold",
+    "customerTaxExempt": false,
+    "customerTaxId": "",
+    "customerTaxIdValid": false,
+    "reversedTaxApplied": false,    
 
     // Discounts in order
     "membershipBasedDiscount": 0,
@@ -688,10 +715,14 @@ email | string  | Customer email address
 paymentMethod | string |  Payment method name
 paymentModule | string | Payment processor name
 tax | number | Tax total
+customerTaxExempt | boolean | `true` if customer is tax exempt, `false` otherwise. [Learn more](https://support.ecwid.com/hc/en-us/articles/213823045-How-to-handle-tax-exempt-customers-in-Ecwid)
+customerTaxId | string | Customer tax ID
+customerTaxIdValid | boolean | `true` if customer tax ID is valid, `false` otherwise
+reversedTaxApplied | boolean | `true` if order tax was set to 0 because customer specified their valid tax ID in checkout process. `false` otherwise
 ipAddress | string  | Customer IP
 couponDiscount | number | Discount applied to order using a coupon
 paymentStatus | string |    Payment status. Supported values: <ul><li>`AWAITING_PAYMENT`</li> <li>`PAID`</li> <li>`CANCELLED`</li> <li>`REFUNDED`</li> <li>`PARTIALLY_REFUNDED`</li> <li>`INCOMPLETE`</li></ul>
-fulfillmentStatus | string |    Fulfilment status. Supported values: <nobr><ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li></ul></nobr>
+fulfillmentStatus | string |    Fulfilment status. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li><li>`READY_FOR_PICKUP`</li></ul>
 refererUrl | string | URL of the page when order was placed (without hash (#) part)
 orderComments | string  | Order comments
 volumeDiscount | number | Sum of discounts based on subtotal. Is included into the `discount` field
@@ -835,6 +866,8 @@ shippingCarrierName | string | Shipping carrier name, e.g. `USPS`
 shippingMethodName | string | Shipping option name
 shippingRate | number | Rate
 estimatedTransitTime | string | Delivery time estimation. Possible formats: number "5", several days estimate "4-9"
+isPickup | boolean | `true` if selected shipping option is local pickup. `false` otherwise
+pickupInstruction | string | Instruction for customer on how to receive their products
 
 #### HandlingFeeInfo
 Field | Type | Description
@@ -848,8 +881,9 @@ Field | Type | Description
 ----- | ---- | -----------
 value | number | Discount value
 type | string | Discount type: `ABS` or `PERCENT`
-base | string | Discount base, one of `ON_TOTAL`, `ON_MEMBERSHIP`, `ON_TOTAL_AND_MEMBERSHIP`
+base | string | Discount base, one of `ON_TOTAL`, `ON_MEMBERSHIP`, `ON_TOTAL_AND_MEMBERSHIP`, `CUSTOM`
 order_total | number | Minimum order subtotal the discount applies to
+description | string | Description of a discount (for discounts with base == `CUSTOM`)
 
 #### CreditCardStatus
 Field | Type | Description
@@ -1394,6 +1428,10 @@ Cache-Control: no-cache
         "tax": 0,
         "paymentStatus": "CANCELLED",
         "fulfillmentStatus": "PROCESSING",
+        "customerTaxExempt": false,
+        "customerTaxId": "",
+        "customerTaxIdValid": false,
+        "reversedTaxApplied": false,
         "billingPerson": {
             "name": "Eugene K",
             "companyName": "Hedgehog and Bucket",
@@ -1482,10 +1520,14 @@ email | string  | Customer email address
 paymentMethod | string |  Payment method name
 paymentModule | string | Payment processor name
 tax | number | Tax total
+customerTaxExempt | boolean | `true` if customer is tax exempt, `false` otherwise. [Learn more](https://support.ecwid.com/hc/en-us/articles/213823045-How-to-handle-tax-exempt-customers-in-Ecwid)
+customerTaxId | string | Customer tax ID
+customerTaxIdValid | boolean | `true` if customer tax ID is valid, `false` otherwise
+reversedTaxApplied | boolean | `true` if order tax was set to 0 because customer specified their valid tax ID in checkout process. `false` otherwise
 ipAddress | string  | Customer IP
 couponDiscount | number | Discount applied to order using a coupon
 paymentStatus | string |    Payment status. Supported values: <ul><li>`AWAITING_PAYMENT`</li> <li>`PAID`</li> <li>`CANCELLED`</li> <li>`REFUNDED`</li> <li>`PARTIALLY_REFUNDED`</li> <li>`INCOMPLETE`</li></ul>
-fulfillmentStatus | string |    Fulfilment status. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li></ul>
+fulfillmentStatus | string |    Fulfilment status. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li><li>`READY_FOR_PICKUP`</li></ul>
 refererUrl | string | URL of the page when order was placed (without hash (#) part)
 orderComments | string  | Order comments
 volumeDiscount | number | Sum of discounts based on subtotal. Is included into the `discount` field
@@ -1595,6 +1637,8 @@ shippingCarrierName | string | Shipping carrier name, e.g. `USPS`
 shippingMethodName | string | Shipping option name
 shippingRate | number | Rate
 estimatedTransitTime | string | Delivery time estimation. Formats accepted: number "5", several days estimate "4-9"
+isPickup | boolean | `true` if selected shipping option is local pickup. `false` otherwise
+pickupInstruction | string | Instruction for customer on how to receive their products
 
 #### HandlingFeeInfo
 Field | Type | Description
@@ -1743,6 +1787,10 @@ Cache-Control: no-cache
         "paymentMethod": "Phone order",
         "tax": 0,
         "paymentStatus": "PAID",
+        "customerTaxExempt": false,
+        "customerTaxId": "",
+        "customerTaxIdValid": false,
+        "reversedTaxApplied": false,
         "fulfillmentStatus": "AWAITING_PROCESSING",
         "createDate": "2015-09-20 19:59:43 +0000",
         "items": [
@@ -1803,10 +1851,14 @@ email | string  | Customer email address
 paymentMethod | string |  Payment method name
 paymentModule | string | Payment processor name
 tax | number | Tax total
+customerTaxExempt | boolean | `true` if customer is tax exempt, `false` otherwise. [Learn more](https://support.ecwid.com/hc/en-us/articles/213823045-How-to-handle-tax-exempt-customers-in-Ecwid)
+customerTaxId | string | Customer tax ID
+customerTaxIdValid | boolean | `true` if customer tax ID is valid, `false` otherwise
+reversedTaxApplied | boolean | `true` if order tax was set to 0 because customer specified their valid tax ID in checkout process. `false` otherwise
 ipAddress | string  | Customer IP
 couponDiscount | number | Discount applied to order using a coupon
 **paymentStatus** | string |    Payment status. Supported values: <ul><li>`AWAITING_PAYMENT`</li> <li>`PAID`</li> <li>`CANCELLED`</li> <li>`REFUNDED`</li> <li>`PARTIALLY_REFUNDED`</li> <li>`INCOMPLETE`</li></ul>. Ignored when creating orders with [public token](#access-tokens)
-**fulfillmentStatus** | string |    Fulfilment status. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li></ul>. Ignored when creating orders with [public token](#access-tokens)
+**fulfillmentStatus** | string |    Fulfilment status. Supported values: <ul><li>`AWAITING_PROCESSING`</li> <li>`PROCESSING`</li> <li>`SHIPPED`</li> <li>`DELIVERED`</li> <li>`WILL_NOT_DELIVER`</li> <li>`RETURNED`</li> <li>`READY_FOR_PICKUP`</li> </ul>. Ignored when creating orders with [public token](#access-tokens)
 refererUrl | string | URL of the page when order was placed (without hash (#) part)
 orderComments | string  | Order comments
 volumeDiscount | number | Sum of discounts based on subtotal. Is included into the `discount` field
@@ -1916,6 +1968,8 @@ shippingCarrierName | string | Shipping carrier name, e.g. `USPS`
 shippingMethodName | string | Shipping option name
 shippingRate | number | Rate
 estimatedTransitTime | string | Delivery time estimation. Formats accepted: number "5", several days estimate "4-9"
+isPickup | boolean | `true` if selected shipping option is local pickup. `false` otherwise
+pickupInstruction | string | Instruction for customer on how to receive their products
 
 #### HandlingFeeInfo
 Field | Type | Description
@@ -2071,14 +2125,15 @@ In case of error, Ecwid responds with an error HTTP status code and JSON-formatt
 
 #### HTTP codes
 
-**HTTP Status** | Description
+**HTTP Status** | Description | Code (optional)
 --------- | -----------| -----------
-400 | Request parameters are malformed
-402 | The functionality/method is not available on the merchant plan
-404 | Order, order item or item option is not found
-413 | The file is too large.  Maximum allowed file size is 100Mb.
-415 | Unsupported content-type: expected `application/octet-stream`
-500 | Uploading of the file failed or there was an internal server error while processing a file
+400 | Request parameters are malformed | 
+402 | The functionality/method is not available on the merchant plan | 
+404 | Order, order item or item option is not found | 
+409 | Product option type is not `FILES` | `OPTIONS_IS_NOT_FILES_TYPE`
+413 | The file is too large.  Maximum allowed file size is 100Mb. | 
+415 | Unsupported content-type: expected `application/octet-stream` | 
+500 | Uploading of the file failed or there was an internal server error while processing a file | 
 
 #### Error response body (optional)
 
@@ -2142,16 +2197,18 @@ In case of error, Ecwid responds with an error HTTP status code and JSON-formatt
 
 **HTTP Status** | Description
 --------- | -----------| -----------
-500 | Request failed -- there was an internal server error
-404 | Order, order item or item option is not found
 400 | Request parameters are malformed
 402 | The functionality/method is not available on the merchant plan
+404 | Order, order item or item option is not found
+409 | Product option type is not `FILES` | `OPTIONS_IS_NOT_FILES_TYPE`
+500 | Request failed -- there was an internal server error
 
 #### Error response body (optional)
 
 Field | Type |  Description
 --------- | ---------| -----------
 errorMessage | string | Error message
+errorCode | string | Error code
 
 
 ## Delete all item option's files
@@ -2209,13 +2266,14 @@ In case of error, Ecwid responds with an error HTTP status code and, optionally,
 
 **HTTP Status** | Description
 --------- | -----------| -----------
-500 | Request failed – there was an internal server error
-404 | Order, order item or item option is not found
 400 | Request parameters are malformed
 402 | The functionality/method is not available on the merchant plan
+404 | Order, order item or item option is not found
+500 | Request failed – there was an internal server error
 
 #### Error response body (optional)
 
 Field | Type |  Description
 --------- | ---------| -----------
 errorMessage | string | Error message
+errorCode | string | Error code
