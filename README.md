@@ -8,6 +8,17 @@ The docs use Markdown syntax. Syntax reference: [Slate markdown](https://github.
 
 #Changelog
 
+## January 18, 2017
+- Added support for SEO-friendly URLs for Ecwid storefronts. [Learn more](https://developers.ecwid.com/api-documentation#seo-friendly-urls)
+- SEO-friendly URLs can be retrieved from Ecwid REST API for [products](https://developers.ecwid.com/api-documentation#products) and [categories](https://developers.ecwid.com/api-documentation#categories) URLs in URL field using `cleanUrls` request parameter. Also, it's possible to change the base storefront URL for such URLs using `baseUrl` request parameter.  
+
+## January 17, 2017
+- **NEW** Added `Ecwid.OnOrderPlaced()` event for Ecwid JavaScript API. It allows to get order details in storefront right after it's placed by customer. [Learn more](https://developers.ecwid.com/api-documentation#ecwid-onorderplaced)
+
+## January 16, 2017
+- **NEW** You can now get `public_token` value in a native app interface by using `EcwidApp.getPayload()` or decrypting payload on server (for enhanced security authentication apps). [Learn more](https://developers.ecwid.com/api-documentation#getpayload)
+- To keep the digital goods of our merchants protected, we removed access token from `adminUrl` field when [getting product details](https://developers.ecwid.com/api-documentation#get-a-product). To download a file, just add the token parameter with the token as a value: `?token=abcde1234`
+
 ## January 5, 2017
 - **NEW** Added support for product dimensions feature. Now each product and shipping itself can be calculated according to the product dimensions specified for products.
 

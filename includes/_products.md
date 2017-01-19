@@ -15,7 +15,7 @@ Content-Type: application/json;charset=utf-8
 Cache-Control: no-cache
 ```
 
-`GET https://app.ecwid.com/api/v3/{storeId}/products?keyword={keyword}&priceFrom={priceFrom}&priceTo={priceTo}&category={category}&withSubcategories={withSubcategories}&sortBy={sortBy}&offset={offset}&limit={limit}&createdFrom={createdFrom}&createdTo={createdTo}&updatedFrom={updatedFrom}&updatedTo={updatedTo}&enabled={enabled}&inStock={inStock}&field{attributeName}={attributeValues}&field{attributeId}={attributeValues}&sku={sku}&productId={productId}&token={token}`
+`GET https://app.ecwid.com/api/v3/{storeId}/products?keyword={keyword}&priceFrom={priceFrom}&priceTo={priceTo}&category={category}&withSubcategories={withSubcategories}&sortBy={sortBy}&offset={offset}&limit={limit}&createdFrom={createdFrom}&createdTo={createdTo}&updatedFrom={updatedFrom}&updatedTo={updatedTo}&enabled={enabled}&inStock={inStock}&field{attributeName}={attributeValues}&field{attributeId}={attributeValues}&sku={sku}&productId={productId}&baseUrl={baseUrl}&cleanUrls={cleanUrls}&token={token}`
 
 Name | Type | Description
 ---- | ---- | -----------
@@ -39,6 +39,8 @@ field{attributeName} | string | Filter by product attribute values. Format: fiel
 field{attributeId} | string | Filter by product attribute values. Works the same as the filter by `field{attributeName}` but attribute IDs are used instead of attribute names. This way is insensitive to attributes renaming.
 sku | string | Product or combination SKU. Ecwid will return details of a product containing that SKU, if SKU value is an exact match. If SKU is specified, other search parameters are ignored, except for product ID.
 productId | number | Internal Ecwid product ID or multiple productIds separated by a comma. If this field is specified, other search parameters are ignored.
+baseUrl | string | Base URL of a storefront for Ecwid to use when returning product URLs (`url` field) instead of storefront URL specified in [store settings](#get-store-profile)
+cleanUrls | boolean | If `true` Ecwid will return the new SEO-friendly URL in the `url` field. If `false` Ecwid will return the old URL format. Can be used together with the `baseUrl` request parameter
 
 <aside class="notice">
 If no filters are set in the URL, API will return all products
@@ -98,12 +100,13 @@ To get all products from the store, use the <strong>offset</strong> parameter. I
           "fixedShippingRateOnly": true,
           "fixedShippingRate": 0,
           "defaultCombinationId": 0,
-          "imageUrl": "http://app.ecwid.com/default-store/00007123-12-sq.jpg",
-          "smallThumbnailUrl": "http://app.ecwid.com/default-store/000017-sq.jpg",
-          "hdThumbnailUrl": "https://app.ecwid.com/images/1003/397690783.jpg",
-          "originalImageUrl": "http://app.ecwid.com/default-store/00005-sq.jpg",
+          "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/397690775.jpg",
+          "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341234.jpg",
+          "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341232.jpg",
+          "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/461717703.jpg",
+          "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124125.jpg",
           "originalImage": {
-              "url": "http://app.ecwid.com/default-store/00005-sq.jpg",
+              "url": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124125.jpg",
               "width": 123,
               "height": 456
           },
@@ -114,6 +117,11 @@ To get all products from the store, use the <strong>offset</strong> parameter. I
               "alt": "AdditionalImage",
               "url": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/312058848.jpg",
               "thumbnail": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/351433814.jpg",
+              "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/397690771.jpg",
+              "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412312.jpg",
+              "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341235.jpg",
+              "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/461717705.jpg",
+              "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124121.jpg",
               "width": 473,
               "height": 545,
               "orderBy": 0
@@ -123,6 +131,11 @@ To get all products from the store, use the <strong>offset</strong> parameter. I
               "alt": "AdditionalImage",
               "url": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/312058850.jpg",
               "thumbnail": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/351433815.jpg",
+              "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/397690775.jpg",
+              "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412311.jpg",
+              "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341238.jpg",
+              "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/4617177879.jpg",
+              "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124179.jpg",
               "width": 247,
               "height": 545,
               "orderBy": 1
@@ -270,21 +283,28 @@ To get all products from the store, use the <strong>offset</strong> parameter. I
             "fixedShippingRateOnly": false,
             "fixedShippingRate": 0,
             "defaultCombinationId": 7084076,
-            "hdThumbnailUrl": "https://app.ecwid.com/images/1003/397690841.jpg",
-            "originalImageUrl": "http://app.ecwid.com/default-store/00007-sq.jpg",
+            "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/3976907712.jpg",
+            "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412311.jpg",
+            "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341239.jpg",
+            "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/4617177031.jpg",
+            "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124114.jpg",
             "originalImage": {
-              "url": "http://app.ecwid.com/default-store/00007-sq.jpg",
+              "url": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124114.jpg",
               "width": 123,
               "height": 456
             },
-            "smallThumbnailUrl": "http://app.ecwid.com/default-store/00007-80-sq.jpg",
             "description": "<h5>Radish</h5>\n<p>The radish (Raphanus sativus) is an edible root vegetable of the Brassicaceae family that was domesticated in Europe in pre-Roman times. They are grown and consumed throughout the world. Radishes have numerous varieties, varying in size, color and duration of required cultivation time. There are some radishes that are grown for their seeds; oilseed radishes are grown, as the name implies, for oil production.</p>\n<p> </p>\n<div style=\"padding: 24px 24px 24px 21px; display: block; background-color: #ececec;\">From <a style=\"color: #1e7ec8; text-decoration: underline;\" title=\"Wikipedia\" href=\"http://en.wikipedia.org\">Wikipedia</a>, the free encyclopedia</div>",
             "galleryImages": [
                 {
                     "id": 18276483,
                     "alt": "Radish with friends",
-                    "url": "http://images-cdn.ecwid.com/images/4870020/237132118.jpg",
-                    "thumbnail": "http://images-cdn.ecwid.com/images/4870020/237132119.jpg",
+                    "url": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124118.jpg",
+                    "thumbnail": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341231.jpg",
+                    "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/3976907714.jpg",
+                    "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412315.jpg",
+                    "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341231.jpg",
+                    "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/4617177035.jpg",
+                    "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124118.jpg",
                     "width": 220,
                     "height": 293,
                     "orderby": 10
@@ -325,14 +345,14 @@ To get all products from the store, use the <strong>offset</strong> parameter. I
                     "name": "pic_200_200.jpg",
                     "description": "",
                     "size": 54492,
-                    "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215101?token=abcd123456"
+                    "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215101"
                 },
                 {
                     "id": 7215102,
                     "name": "14293004.zip",
                     "description": "Files archive",
                     "size": 18955,
-                    "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215102?token=abcd1234"
+                    "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215102"
                 }
             ],
             "relatedProducts": {
@@ -489,12 +509,13 @@ Cache-Control: no-cache
           "fixedShippingRateOnly": true,
           "fixedShippingRate": 0,
           "defaultCombinationId": 0,
-          "imageUrl": "http://app.ecwid.com/default-store/00007123-12-sq.jpg",
-          "smallThumbnailUrl": "http://app.ecwid.com/default-store/000017-sq.jpg",
-          "hdThumbnailUrl": "https://app.ecwid.com/images/1003/397690783.jpg",
-          "originalImageUrl": "http://app.ecwid.com/default-store/00005-sq.jpg",
+          "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/397690775.jpg",
+          "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341234.jpg",
+          "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341232.jpg",
+          "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/461717703.jpg",
+          "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124125.jpg",
           "originalImage": {
-              "url": "http://app.ecwid.com/default-store/00005-sq.jpg",
+              "url": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124125.jpg",
               "width": 123,
               "height": 456
           },
@@ -505,6 +526,11 @@ Cache-Control: no-cache
               "alt": "AdditionalImage",
               "url": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/312058848.jpg",
               "thumbnail": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/351433814.jpg",
+              "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/397690771.jpg",
+              "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412312.jpg",
+              "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341235.jpg",
+              "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/461717705.jpg",
+              "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124121.jpg",
               "width": 473,
               "height": 545,
               "orderBy": 0
@@ -514,6 +540,11 @@ Cache-Control: no-cache
               "alt": "AdditionalImage",
               "url": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/312058850.jpg",
               "thumbnail": "https://dpbfm6h358sh7.cloudfront.net/images/5035009/351433815.jpg",
+              "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/397690775.jpg",
+              "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412311.jpg",
+              "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341238.jpg",
+              "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/4617177879.jpg",
+              "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124179.jpg",
               "width": 247,
               "height": 545,
               "orderBy": 1
@@ -624,7 +655,7 @@ wholesalePrices | Array\<*WholesalePrice*\> |  Sorted array of wholesale price t
 compareToPrice |  number | Product's sale price displayed strike-out in the customer frontend *Omitted if empty*
 isShippingRequired | boolean | `true` if product requires shipping, `false` otherwise
 weight |  number | Product weight in the units defined in store settings. *Omitted for intangible products*
-url | string |  URL of the product's details page in the store
+url | string |  URL of the product's details page in the store. If `baseUrl` request parameter is specified, then the `url` field will be generated according to that URL. For example, if `baseUrl` is `"https://mycoolstore.com"` then the product URLs in `url` field will be in this format: `"https://mycoolstore.com#!/apple/p/70445445"`. If `cleanUrls` request parameter is `true`, then `url` field will have the new SEO-friendly format regardless of whether the `baseUrl` request parameter is specified
 created | string | Date and time of the product creation. Example: `2014-07-30 10:32:37 +0000`
 updated |  string | Product last update date/time
 createTimestamp | number | The date of product creation in UNIX Timestamp format, e.g `1427268654`
@@ -636,10 +667,10 @@ warningLimit | number | The minimum 'warning' amount of the product items in sto
 fixedShippingRateOnly | boolean | `true` if shipping cost for this product is calculated as *'Fixed rate per item'* (managed under the "Tax and Shipping" section of the product management page in Ecwid Control panel). `false` otherwise. With this option on, the `fixedShippingRate` field specifies the shipping cost of the product
 fixedShippingRate | number |  When `fixedShippingRateOnly` is `true`, this field sets the product fixed shipping cost per item. When `fixedShippingRateOnly` is `false`, the value in this field is treated as an extra shipping cost the product adds to the global calculated shipping
 defaultCombinationId |  number |  Identifier of the default product combination, which is defined by the default values of product options.
-thumbnailUrl |  string | URL of the product thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. *The original uploaded product image is available in the `originalImageUrl` field.*
-imageUrl |  string  | URL of the product image resized to fit 500x500. *The original uploaded product image is available in the `originalImageUrl` field.*
-smallThumbnailUrl | string  | URL of the product thumbnail resized to fit 80x80. *The original uploaded product image is available in the `originalImageUrl` field.*
-hdThumbnailUrl | string  | Product HD thumbnail URL resized to fit 650x650px
+thumbnailUrl |  string | URL of the product thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. Default size of the biggest dimension is 400px. *The original uploaded product image is available in the `originalImageUrl` field.*
+imageUrl |  string  | URL of the product image resized to fit 1500x1500px. *The original uploaded product image is available in the `originalImageUrl` field.*
+smallThumbnailUrl | string  | URL of the product thumbnail resized to fit 160x160px. *The original uploaded product image is available in the `originalImageUrl` field.*
+hdThumbnailUrl | string  | Product HD thumbnail URL resized to fit 800x800px
 originalImageUrl |  string  | URL of the original not resized product image
 originalImage | \<ImageDetails\> | Details of the product image
 description | string  | Product description *in HTML*
@@ -689,8 +720,13 @@ Field | Type  | Description
 ----- | ----- | -----------
 id | number | Internal gallery image ID
 alt | string |  Image description, displayed in the image tag's *alt* attribute
-url | string |  Image URL
-thumbnail | string  | Image thumbnail URL resized to fit 46x42px box
+url | string |  **Deprecated**. Original image URL. Equals `originalImageUrl`
+thumbnail | string  | **Deprecated**. Image thumbnail URL resized to fit 160x160px. Equals `smallThumbnailUrl`
+thumbnailUrl |  string | URL of the product thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. Default size of the biggest dimension is 400px. *The original uploaded product image is available in the `originalImageUrl` field.*
+imageUrl |  string  | URL of the product image resized to fit 1500x1500px. *The original uploaded product image is available in the `originalImageUrl` field.*
+smallThumbnailUrl | string  | URL of the product thumbnail resized to fit 160x160px. *The original uploaded product image is available in the `originalImageUrl` field.*
+hdThumbnailUrl | string  | Product HD thumbnail URL resized to fit 800x800px
+originalImageUrl |  string  | URL of the original not resized product image
 width | number |  Image width
 height |  number |  Image height
 orderby |  number |  The sort weight of the image in the gallery images list. The less the number, the closer the image to the beginning of the gallery
@@ -718,7 +754,7 @@ id |  number |  Internal ID of the file
 name |  string |  File name
 description | string |  File description defined by the store administrator
 size |  number |  File size, bytes (64-bit integer)
-adminUrl | string | Link to the file. Be careful: the link contains the API access token so make sure the link is not displayed as is in your application
+adminUrl | string | Direct link to the file. **Important**: to download the file, add your API token to this URL like this: `https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215102?token=YOUR-API-TOKEN` 
 
 #### RelatedProducts
 Field | Type  | Description
@@ -740,11 +776,11 @@ id |  number |  Combination ID
 combinationNumber | number |  Combination # number, which is displayed in the combinations table in Control panel
 options | Array\<*OptionValue*\> | Set of options that identifies this combination. An array of name-value pairs
 sku | string  | Combination SKU. Omitted if the combination inherits the base product's SKU
-smallThumbnailUrl | string  | URL of the combination thumbnail resized to fit 80x80 px box. Omitted if the combination inherits the base product's image. *The original uploaded combination image is available in the `originalImageUrl` field.*
-hdThumbnailUrl | string  | Combination HD thumbnail URL resized to fit 650x650px
-thumbnailUrl |  string  | URL of the combination thumbnail displayed on the product list pages if the combination is default one. Thumbnails size is defined in the store settings and the same as the product thumbnail size. Omitted if the combination inherits the base product's image. *The original uploaded combination image is available in the `originalImageUrl` field.*
-imageUrl |  string  | URL of the combination image resized to fit 500x500. Omitted if the combination inherits the base product's image. *The original uploaded combination image is available in the `originalImageUrl` field.*
-originalImageUrl | string | URL of the original not resized combination image. Omitted if the combination inherits the base product's image.
+thumbnailUrl |  string | URL of the product combination thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. Default size of biggest dimension is 400px. Omitted if the combination inherits the base product's image. *The original uploaded product image is available in the `originalImageUrl` field.*
+imageUrl |  string  | URL of the product combination image resized to fit 1500x1500px. Omitted if the combination inherits the base product's image. *The original uploaded product image is available in the `originalImageUrl` field.*
+smallThumbnailUrl | string  | URL of the product combination thumbnail resized to fit 160x160px. Omitted if the combination inherits the base product's image. *The original uploaded product image is available in the `originalImageUrl` field.*
+hdThumbnailUrl | string  | Product combination HD thumbnail URL resized to fit 800x800px. Omitted if the combination inherits the base product's image.
+originalImageUrl |  string  | URL of the original not resized product combination image. Omitted if the combination inherits the base product's image.
 quantity | number | Amount of the combination items in stock. Omitted if the combination inherits the base product's quantity.
 unlimited | boolean | `true` if the combination has unlimited stock (that is, never runs out)
 price | number | Combination price. Omitted if the combination inherits the base product's price.
@@ -785,11 +821,12 @@ In case of error, Ecwid responds with an error HTTP status code and, optionally,
 
 #### HTTP codes
 
-HTTP Status | Meaning
-------------|--------
-400 | Request parameters are malformed
-415 | Unsupported content-type: expected `application/json` or `text/json`
-500 | Cannot get the product because of an error on the server
+HTTP Status | Meaning | Code (optional)
+------------|--------|-----------
+400 | Request parameters are malformed | 
+400 | The cleanUrls value is invalid. It must be either `true` or `false` | `CLEAN_URLS_PARAMETER_IS_INVALID`
+415 | Unsupported content-type: expected `application/json` or `text/json` | 
+500 | Cannot get the product because of an error on the server | 
 
 #### Error response body (optional)
 
@@ -819,13 +856,16 @@ Content-Type: application/json;charset=utf-8
 Cache-Control: no-cache
 ```
 
-`GET https://app.ecwid.com/api/v3/{storeId}/products/{productId}?token={token}`
+`GET https://app.ecwid.com/api/v3/{storeId}/products/{productId}?token={token}&baseUrl={baseUrl}&cleanUrls={cleanUrls}`
 
 Name | Type    | Description
 ---- | ------- | --------------
 **storeId** |  number | Ecwid store ID
 **productId** | number | Product ID
 **token** |  string |  oAuth token
+baseUrl | string | Base URL of a storefront for Ecwid to use when returning product URL (`url` field) instead of storefront URL specified in [store settings](#get-store-profile)
+cleanUrls | boolean | If `true` Ecwid will return the new SEO-friendly URL in the `url` field. If `false` Ecwid will return the old URL format. Can be used together with the `baseUrl` request parameter
+
 <aside class="notice">
 Parameters in bold are mandatory
 </aside>
@@ -902,25 +942,32 @@ Parameters in bold are mandatory
     "fixedShippingRateOnly": false,
     "fixedShippingRate": 0,
     "defaultCombinationId": 7084076,
-    "hdThumbnailUrl": "https://app.ecwid.com/images/1003/397690824.jpg",
-    "originalImageUrl": "http://app.ecwid.com/default-store/00007-sq.jpg",
+    "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/3976907712.jpg",
+    "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412311.jpg",
+    "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341239.jpg",
+    "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/4617177031.jpg",
+    "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124114.jpg",
     "originalImage": {
-      "url": "http://app.ecwid.com/default-store/00007-sq.jpg",
+      "url": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124114.jpg",
       "width": 123,
       "height": 456
     },
-    "smallThumbnailUrl": "http://app.ecwid.com/default-store/00007-80-sq.jpg",
     "description": "<h5>Radish</h5>\n<p>The radish (Raphanus sativus) is an edible root vegetable of the Brassicaceae family that was domesticated in Europe in pre-Roman times. They are grown and consumed throughout the world. Radishes have numerous varieties, varying in size, color and duration of required cultivation time. There are some radishes that are grown for their seeds; oilseed radishes are grown, as the name implies, for oil production.</p>\n<p> </p>\n<div style=\"padding: 24px 24px 24px 21px; display: block; background-color: #ececec;\">From <a style=\"color: #1e7ec8; text-decoration: underline;\" title=\"Wikipedia\" href=\"http://en.wikipedia.org\">Wikipedia</a>, the free encyclopedia</div>",
     "galleryImages": [
-        {
-            "id": 18276483,
-            "alt": "Radish with friends",
-            "url": "http://images-cdn.ecwid.com/images/4870020/237132118.jpg",
-            "thumbnail": "http://images-cdn.ecwid.com/images/4870020/237132119.jpg",
-            "width": 220,
-            "height": 293,
-            "orderby": 10
-        }
+      {
+        "id": 18276483,
+        "alt": "Radish with friends",
+        "url": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124118.jpg",
+        "thumbnail": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341231.jpg",
+        "hdThumbnailUrl": "https://dpbfm6h358sh7.cloudfront.net/images/1003/3976907714.jpg",
+        "thumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/1234123412315.jpg",
+        "smallThumbnailUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/123412341231.jpg",
+        "imageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/images/1003/4617177035.jpg",
+        "originalImageUrl": "https://dqzrr9k4bjpzk.cloudfront.net/1003/124124118.jpg",
+        "width": 220,
+        "height": 293,
+        "orderby": 10
+      }
     ],
     "categoryIds": [
         9691095
@@ -956,14 +1003,14 @@ Parameters in bold are mandatory
             "name": "pic_200_200.jpg",
             "description": "",
             "size": 54492,
-            "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215101?token=abcd123456"
+            "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215101"
         },
         {
             "id": 7215102,
             "name": "14293004.zip",
             "description": "Files archive",
             "size": 18955,
-            "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215102?token=abcd1234"
+            "adminUrl": "https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215102"
         }
     ],
     "relatedProducts": {
@@ -1095,7 +1142,7 @@ wholesalePrices | Array\<*WholesalePrice*\> |  Sorted array of wholesale price t
 compareToPrice |  number | Product's sale price displayed strike-out in the customer frontend *Omitted if empty*
 isShippingRequired | boolean | `true` if product requires shipping, `false` otherwise
 weight |  number | Product weight in the units defined in store settings. *Omitted for intangible products*
-url | string |  URL of the product's details page in the store
+url | string |  URL of the product's details page in the store. If `baseUrl` request parameter is specified, then the `url` field will be generated according to that URL. For example, if `baseUrl` is `"https://mycoolstore.com"` then the product URLs in `url` field will be in this format: `"https://mycoolstore.com#!/apple/p/70445445"`. If `cleanUrls` request parameter is `true`, then `url` field will have the new SEO-friendly format regardless of whether the `baseUrl` request parameter is specified
 created | string | Date and time of the product creation. Example: `2014-07-30 10:32:37 +0000`
 updated |  string | Product last update date/time
 createTimestamp | number | The date of product creation in UNIX Timestamp format, e.g `1427268654`
@@ -1107,10 +1154,10 @@ warningLimit | number | The minimum 'warning' amount of the product items in sto
 fixedShippingRateOnly | boolean | `true` if shipping cost for this product is calculated as *'Fixed rate per item'* (managed under the "Tax and Shipping" section of the product management page in Ecwid Control panel). `false` otherwise. With this option on, the `fixedShippingRate` field specifies the shipping cost of the product
 fixedShippingRate | number |  When `fixedShippingRateOnly` is `true`, this field sets the product fixed shipping cost per item. When `fixedShippingRateOnly` is `false`, the value in this field is treated as an extra shipping cost the product adds to the global calculated shipping
 defaultCombinationId |  number |  Identifier of the default product combination, which is defined by the default values of product options.
-thumbnailUrl |  string | URL of the product thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. *The original uploaded product image is available in the `originalImageUrl` field.*
-imageUrl |  string  | URL of the product image resized to fit 500x500. *The original uploaded product image is available in the `originalImageUrl` field.*
-smallThumbnailUrl | string  | URL of the product thumbnail resized to fit 80x80. *The original uploaded product image is available in the `originalImageUrl` field.*
-hdThumbnailUrl | string  | Product HD thumbnail URL resized to fit 650x650px
+thumbnailUrl |  string | URL of the product thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. Default size of biggest dimension is 400px. *The original uploaded product image is available in the `originalImageUrl` field.*
+imageUrl |  string  | URL of the product image resized to fit 1500x1500px. *The original uploaded product image is available in the `originalImageUrl` field.*
+smallThumbnailUrl | string  | URL of the product thumbnail resized to fit 160x160px. *The original uploaded product image is available in the `originalImageUrl` field.*
+hdThumbnailUrl | string  | Product HD thumbnail URL resized to fit 800x800px
 originalImageUrl |  string  | URL of the original not resized product image
 originalImage | \<ImageDetails\> | Details of the product image
 description | string  | Product description *in HTML*
@@ -1160,8 +1207,13 @@ Field | Type  | Description
 ----- | ----- | -----------
 id | number | Internal gallery image ID
 alt | string |  Image description, displayed in the image tag's *alt* attribute
-url | string |  Image URL
-thumbnail | string  | Image thumbnail URL resized to fit 46x42px box
+url | string |  **Deprecated**. Original image URL. Equals `originalImageUrl`
+thumbnail | string  | **Deprecated**. Image thumbnail URL resized to fit 160x160px. Equals `smallThumbnailUrl`
+thumbnailUrl |  string | URL of the product thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. Default size of biggest dimension is 400px. *The original uploaded product image is available in the `originalImageUrl` field.*
+imageUrl |  string  | URL of the product image resized to fit 1500x1500px. *The original uploaded product image is available in the `originalImageUrl` field.*
+smallThumbnailUrl | string  | URL of the product thumbnail resized to fit 160x160px. *The original uploaded product image is available in the `originalImageUrl` field.*
+hdThumbnailUrl | string  | Product HD thumbnail URL resized to fit 800x800px
+originalImageUrl |  string  | URL of the original not resized product image
 width | number |  Image width
 height |  number |  Image height
 orderby |  number |  The sort weight of the image in the gallery images list. The less the number, the closer the image to the beginning of the gallery
@@ -1188,7 +1240,7 @@ id |  number |  Internal ID of the file
 name |  string |  File name
 description | string |  File description defined by the store administrator
 size |  number |  File size, bytes (64-bit integer)
-adminUrl | string | Link to the file. Be careful: the link contains the API access token so make sure the link is not displayed as is in your application
+adminUrl | string | Direct link to the file. **Important**: to download the file, add your API token to this URL like this: `https://app.ecwid.com/api/v3/4870020/products/37208340/files/7215102?token=YOUR-API-TOKEN` 
 
 #### RelatedProducts
 Field | Type  | Description
@@ -1210,11 +1262,11 @@ id |  number |  Combination ID
 combinationNumber | number |  Combination # number, which is displayed in the combinations table in Control panel
 options | Array\<*OptionValue*\> | Set of options that identifies this combination. An array of name-value pairs
 sku | string  | Combination SKU. Omitted if the combination inherits the base product's SKU
-smallThumbnailUrl | string  | URL of the combination thumbnail resized to fit 80x80 px box. Omitted if the combination inherits the base product's image. *The original uploaded combination image is available in the `originalImageUrl` field.*
-thumbnailUrl |  string  | URL of the combination thumbnail displayed on the product list pages if the combination is default one. Thumbnails size is defined in the store settings and the same as the product thumbnail size. Omitted if the combination inherits the base product's image. *The original uploaded combination image is available in the `originalImageUrl` field.*
-hdThumbnailUrl | string  | Combination HD thumbnail URL resized to fit 650x650px
-imageUrl |  string  | URL of the combination image resized to fit 500x500. Omitted if the combination inherits the base product's image. *The original uploaded combination image is available in the `originalImageUrl` field.*
-originalImageUrl | string | URL of the original not resized combination image. Omitted if the combination inherits the base product's image.
+thumbnailUrl |  string | URL of the product combination thumbnail displayed on the product list pages. Thumbnails size is defined in the store settings. Default size of biggest dimension is 400px. Omitted if the combination inherits the base product's image. *The original uploaded product image is available in the `originalImageUrl` field.*
+imageUrl |  string  | URL of the product combination image resized to fit 1500x1500px. Omitted if the combination inherits the base product's image. *The original uploaded product image is available in the `originalImageUrl` field.*
+smallThumbnailUrl | string  | URL of the product combination thumbnail resized to fit 160x160px. Omitted if the combination inherits the base product's image. *The original uploaded product image is available in the `originalImageUrl` field.*
+hdThumbnailUrl | string  | Product combination HD thumbnail URL resized to fit 800x800px. Omitted if the combination inherits the base product's image.
+originalImageUrl |  string  | URL of the original not resized product combination image. Omitted if the combination inherits the base product's image.
 quantity | number | Amount of the combination items in stock. Omitted if the combination inherits the base product's quantity.
 unlimited | boolean | `true` if the combination has unlimited stock (that is, never runs out)
 price | number | Combination price. Omitted if the combination inherits the base product's price.
@@ -1253,10 +1305,11 @@ In case of error, Ecwid responds with an error HTTP status code and, optionally,
 
 #### HTTP codes
 
-HTTP Status | Meaning
-------------|--------
-404 | Product is not found
-500 | Cannot get the product because of an error on the server
+HTTP Status | Meaning | Code (optional)
+------------|--------|-----------
+400 | The cleanUrls value is invalid. It must be either `true` or `false` | `CLEAN_URLS_PARAMETER_IS_INVALID`
+404 | Product is not found | 
+500 | Cannot get the product because of an error on the server | 
 
 #### Error response body (optional)
 
