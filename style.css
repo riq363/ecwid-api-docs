@@ -1,0 +1,18 @@
+.subnav span {
+    color: #444;
+    line-height: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.wy-menu, .wy-nav-side {
+	background-color: white;
+}
+
+li.current a {
+	color: #color: #666;
+}
+
+.subnav a {
+	color: #777;
+}
