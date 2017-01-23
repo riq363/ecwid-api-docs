@@ -14,5 +14,28 @@ li.current a {
 }
 
 .subnav a {
-	color: #777;
+	color: #777 !important;
+}
+
+code {
+	font: 12px/1.5 Consolas,Menlo,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New",monospace,serif;
+	color: #333;
+	background-color: rgba(0,0,0,0.05);
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.content aside {
+	text-shadow: none;
+    padding: 1em;
+    text-shadow: 0 1px 0 #c6dde9;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    background: #F6F5F0;
+    line-height: 1.6;
+}
+
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
 }
