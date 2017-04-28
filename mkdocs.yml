@@ -1,6 +1,0 @@
-theme: mkdocs
-
-site_name: Marshmallow Generator
-
-extra_css:
-  - style.css
